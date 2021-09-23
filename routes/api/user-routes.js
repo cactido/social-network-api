@@ -60,10 +60,10 @@ router.post('/:userId/friends/:friendId', (req, res) => {
     .catch(err => res.status(500).json(err))
 })
 //remove friend
-router.post('/:userId/friends/:friendId', (req, res) => {
+router.delete('/:userId/friends/:friendId', (req, res) => {
     User.findOneAndUpdate(
         { _id: req.params.userId },
-        { $pull: { friends: params.friendId }},
+        { $pull: { friends: req.params.friendId }},
         { new: true }
     )
     .then(data => res.json(data))

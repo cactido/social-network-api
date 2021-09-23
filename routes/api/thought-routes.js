@@ -28,47 +28,59 @@ router.get('/:id', (req, res) => {
 
 router.post('/', (req, res) => {
     Thought.create(req.body)
-    .then(({_id}) => {
-        return User.findOneAndUpdate(
-            { username: req.body.username },
-            { $push: { thoughts: _id }},
-            { new: true }
-        );
-    })
-    .then(data => res.json(data))
-    .catch(err => res.status(500).json(err))
+        .then(({ _id }) => {
+            return User.findOneAndUpdate(
+                { username: req.body.username },
+                { $push: { thoughts: _id } },
+                { new: true }
+            );
+        })
+        .then(data => res.json(data))
+        .catch(err => res.status(500).json(err))
 })
 
 router.put('/:id', (req, res) => {
     Thought.findOneAndUpdate({ _id: req.params.id }, req.body)
-    .then(data => res.json(data))
-    .catch(err => res.status(500).json(err))
+        .then(data => res.json(data))
+        .catch(err => {
+            res.status(500).json(err);
+            console.log(err)
+        });
 })
 
 router.delete('/:id', (req, res) => {
     Thought.findOneAndDelete({ _id: req.params.id })
-    .then(data => res.json(data))
-    .catch(err => res.status(500).json(rer))
+        .then(data => res.json(data))
+        .catch(err => {
+            res.status(500).json(err);
+            console.log(err)
+        });
 })
 //add reaction
 router.post('/:thoughtId/reactions', (req, res) => {
     Thought.findOneAndUpdate(
         { _id: req.params.thoughtId },
-        { $push: { reactions: req.body }},
-        { new: true, runValidators: true}
+        { $push: { reactions: req.body } },
+        { new: true, runValidators: true }
     )
-    .then(data => res.json(data))
-    .catch(err => res.status(500).json(err))
+        .then(data => res.json(data))
+        .catch(err => {
+            res.status(500).json(err);
+            console.log(err)
+        });
 })
 //remove reaction
 router.post('/:thoughtId/reactions/:reactionId', (req, res) => {
     Thought.findOneAndUpdate(
         { _id: req.params.thoughtId },
-        { $pull: { reactionId: params.reactionId }},
+        { $pull: { reactionId: req.params.reactionId } },
         { new: true }
     )
-    .then(data => res.json(data))
-    .catch(err => res.status(500).json(err))
+        .then(data => res.json(data))
+        .catch(err => {
+            res.status(500).json(err);
+            console.log(err)
+        });
 })
 
 module.exports = router;
